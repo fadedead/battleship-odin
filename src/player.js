@@ -8,8 +8,8 @@ class Player {
     this.movesPlayed = new Set();
   }
 
-  setOpponent(opponentBoard) {
-    this.opponentBoard = opponentBoard;
+  setOpponent(opponent) {
+    this.opponentBoard = opponent.gameboard;
   }
 
   playMove(move) {
