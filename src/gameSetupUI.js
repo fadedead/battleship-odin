@@ -1,10 +1,4 @@
-const ships = {
-  2: 4,
-  3: 3,
-  4: 2,
-};
-
-const currState = {};
+const { shipsAvailable } = require("./config");
 
 function getGameSetup(player) {
   const setupDiv = document.createElement("div");
@@ -20,20 +14,23 @@ function getGameSetup(player) {
   const ships = getShips();
   setupContainer.appendChild(shipsDiv);
 
-  const buttonsDiv = document.createElement("div");
+  const buttonsDiv = getButtons();
 
   setupDiv.appendChild(setupContainer);
+  setupDiv.appendChild(buttonsDiv);
 
   return setupDiv;
 }
 
-function getBoard(player) {
+function getBoard() {
   const board = document.createElement("div");
   board.classList.add("board");
 
+  const shipsToBePlaced = { ...shipsAvailable };
   const boardArr = [];
+  const shipPostions = [];
   let isLeft = true;
-  let currLength = 3;
+  let currLength = parseInt(Object.keys(shipsToBePlaced)[0]);
 
   for (let row = 0; row < 10; row++) {
     const currRow = [];
@@ -41,8 +38,10 @@ function getBoard(player) {
       const currDiv = document.createElement("div");
       currDiv.classList.add("cell");
 
-      currDiv.addEventListener("click", (e) => {
-        handleMouseClick(row, col, currLength, isLeft, boardArr);
+      currDiv.addEventListener("click", () => {
+        handleMouseClick(row, col, currLength, isLeft, boardArr, shipPostions);
+        currLength = handleShipToPlace(shipsToBePlaced, currLength);
+        if (currLength === "END") alert("done");
       });
 
       currDiv.addEventListener("contextmenu", (e) => {
@@ -78,7 +77,23 @@ function clearUnfilledCells(boardArr) {
   }
 }
 
-function handleMouseClick(row, col, currLength, isLeft, boardArr) {
+function handleShipToPlace(shipsToBePlaced, currLength) {
+  shipsToBePlaced[currLength] -= 1;
+  if (shipsToBePlaced[currLength] > 0) return currLength;
+  else {
+    delete shipsToBePlaced[currLength];
+    return parseInt(Object.keys(shipsToBePlaced)[0]) || "END";
+  }
+}
+
+function handleMouseClick(
+  row,
+  col,
+  currLength,
+  isLeft,
+  boardArr,
+  shipPostions,
+) {
   if (
     boardArr[row][col].style.backgroundColor === "red" ||
     boardArr[row][col].style.backgroundColor === "black"
@@ -93,12 +108,15 @@ function handleMouseClick(row, col, currLength, isLeft, boardArr) {
       boardArr[row][currCol].style.backgroundColor = divColor;
       currCol += 1;
     }
+    shipPostions.push([row, col, 0, currLength]);
   } else {
     let currRow = row;
     while (currRow < row + currLength) {
       boardArr[currRow][col].style.backgroundColor = divColor;
       currRow += 1;
     }
+
+    shipPostions.push([row, col, 1, currLength]);
   }
 }
 
@@ -163,6 +181,39 @@ function handleMouseLeave(row, col, currLength, isLeft, boardArr) {
 }
 
 function getShips() {}
+
+function getButtons() {
+  const buttonsContainer = document.createElement("div");
+  buttonsContainer.classList.add("buttons-container");
+
+  const start = document.createElement("button");
+  start.innerText = "Start";
+  start.classList.add("setup-button");
+
+  start.addEventListener("click", () => {});
+
+  buttonsContainer.appendChild(start);
+
+  const reset = document.createElement("button");
+
+  reset.innerText = "Reset";
+  reset.classList.add("setup-button");
+
+  reset.addEventListener("click", () => {
+    const setupContainer =
+      document.getElementsByClassName("setup-container")[0];
+    const board = document.getElementsByClassName("board")[0];
+
+    setupContainer.removeChild(board);
+
+    const newBoard = getBoard();
+    setupContainer.appendChild(newBoard);
+  });
+
+  buttonsContainer.appendChild(reset);
+
+  return buttonsContainer;
+}
 
 module.exports = {
   getGameSetup,
