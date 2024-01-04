@@ -1,4 +1,7 @@
 const { shipsAvailable } = require("./config");
+const { Game } = require("./game");
+const { showGameVsComputer } = require("./gameUI");
+const { generateRandomShipPlacements } = require("./gameUtil");
 
 function getGameSetup(player) {
   const setupDiv = document.createElement("div");
@@ -41,7 +44,11 @@ function getBoard() {
       currDiv.addEventListener("click", () => {
         handleMouseClick(row, col, currLength, isLeft, boardArr, shipPostions);
         currLength = handleShipToPlace(shipsToBePlaced, currLength);
-        if (currLength === "END") alert("done");
+        if (currLength === "END") {
+          const game = new Game();
+          game.startGameVsComputer(shipPostions);
+          showGameVsComputer(game, shipPostions);
+        }
       });
 
       currDiv.addEventListener("contextmenu", (e) => {
@@ -186,13 +193,18 @@ function getButtons() {
   const buttonsContainer = document.createElement("div");
   buttonsContainer.classList.add("buttons-container");
 
-  const start = document.createElement("button");
-  start.innerText = "Start";
-  start.classList.add("setup-button");
+  const random = document.createElement("button");
+  random.innerText = "Random";
+  random.classList.add("setup-button");
 
-  start.addEventListener("click", () => {});
+  random.addEventListener("click", () => {
+    const game = new Game();
+    const shipPositions = generateRandomShipPlacements();
+    game.startGameVsComputer(shipPositions);
+    showGameVsComputer(game, shipPositions);
+  });
 
-  buttonsContainer.appendChild(start);
+  buttonsContainer.appendChild(random);
 
   const reset = document.createElement("button");
 
