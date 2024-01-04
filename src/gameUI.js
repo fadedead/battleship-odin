@@ -44,13 +44,13 @@ function generateBoardOfShipPlacements(shipPlacements) {
     if (rotation == 0) {
       let currCol = col;
       while (currCol < col + size) {
-        boardArr[row][currCol].style.backgroundColor = "black";
+        boardArr[row][currCol].style.backgroundColor = "gray";
         currCol += 1;
       }
     } else {
       let currRow = row;
       while (currRow < row + size) {
-        boardArr[currRow][col].style.backgroundColor = "black";
+        boardArr[currRow][col].style.backgroundColor = "gray";
         currRow += 1;
       }
     }
