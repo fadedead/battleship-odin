@@ -1,23 +1,29 @@
-function showGameVsComputer(game, shipPlacements) {
+let game = null;
+let playerOneBoard = null;
+let playerTwoBoard = null;
+
+function showGameVsComputer(currGame, shipPlacements) {
+  game = currGame;
   const content = document.getElementById("content");
   const setupDiv = document.getElementsByClassName("setup-div")[0];
   content.removeChild(setupDiv);
 
-  const gameDiv = getGameDiv(shipPlacements);
+  const gameDiv = getGameDivVsComputer(shipPlacements);
+  gameDiv.classList.add("game-div");
 
   content.appendChild(gameDiv);
 }
 
-function getGameDiv(shipPlacements) {
+function getGameDivVsComputer(shipPlacements) {
   const gameboardContainer = document.createElement("div");
   gameboardContainer.classList.add("gameboard-container");
 
-  const playerOneBoard = generateBoardOfShipPlacements(shipPlacements);
+  playerOneBoard = generateBoardOfShipPlacements(shipPlacements);
 
-  const playerTwoBoard = generateEnemyBoard();
+  playerTwoBoard = generateOpponentBoard();
 
-  gameboardContainer.appendChild(playerOneBoard);
-  gameboardContainer.appendChild(playerTwoBoard);
+  gameboardContainer.appendChild(playerOneBoard.board);
+  gameboardContainer.appendChild(playerTwoBoard.board);
 
   return gameboardContainer;
 }
@@ -55,10 +61,10 @@ function generateBoardOfShipPlacements(shipPlacements) {
       }
     }
   }
-  return board;
+  return { board, boardArr };
 }
 
-function generateEnemyBoard() {
+function generateOpponentBoard() {
   const board = document.createElement("div");
   board.classList.add("board");
 
@@ -69,12 +75,43 @@ function generateEnemyBoard() {
       const currDiv = document.createElement("div");
       currDiv.classList.add("cell");
 
+      const clickHandler = () => {
+        game.playMoveVsComputer([row, col]);
+        currDiv.removeEventListener("click", clickHandler);
+      };
+
+      currDiv.addEventListener("click", clickHandler);
+
       currRow.push(currDiv);
       board.appendChild(currDiv);
     }
     boardArr.push(currRow);
   }
-  return board;
+  return { board, boardArr };
 }
 
-module.exports = { showGameVsComputer };
+function updatePlayerBoards() {
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      if (game.playerOne.gameboard.getCoordsState([row, col]) == "MISS")
+        playerOneBoard.boardArr[row][col].innerText = "X";
+      if (game.playerOne.gameboard.getCoordsState([row, col]) == "HIT")
+        playerOneBoard.boardArr[row][col].innerText = "H";
+      if (game.playerTwo.gameboard.getCoordsState([row, col]) == "MISS")
+        playerTwoBoard.boardArr[row][col].innerText = "X";
+      if (game.playerTwo.gameboard.getCoordsState([row, col]) == "HIT")
+        playerTwoBoard.boardArr[row][col].innerText = "H";
+    }
+  }
+}
+
+function gameFinished(winner) {
+  alert(winner);
+  location.reload();
+}
+
+module.exports = {
+  showGameVsComputer,
+  gameFinished,
+  updatePlayerBoards,
+};

@@ -1,7 +1,5 @@
-import { getGameSetup } from "./gameSetupUI";
+const { getGameSetup } = require("./gameSetupUI");
 import "./style.css";
-
-console.log("Hello Fadedead");
 
 function main() {
   const content = document.getElementById("content");

@@ -15,15 +15,17 @@ class Player {
   playMove(move) {
     if (this.opponentBoard == null)
       throw new Error("Opponent not set for player");
-    this.opponentBoard.recieveAttack(move);
+    const [x, y] = [...move];
+    this.movesPlayed.add(`${x}${y}`);
+    this.opponentBoard.receiveAttack(move);
   }
 
   playRandomMove() {
     if (this.opponentBoard == null)
       throw new Error("Opponent not set for player");
 
-    const x = getRandomInt(0, 9);
-    const y = getRandomInt(0, 9);
+    let x = getRandomInt(0, 9);
+    let y = getRandomInt(0, 9);
     while (this.movesPlayed.has(`${x}${y}`)) {
       x = getRandomInt(0, 9);
       y = getRandomInt(0, 9);

@@ -14,7 +14,9 @@ function getGameSetup(player) {
   setupContainer.appendChild(board);
 
   const shipsDiv = document.createElement("div");
+  shipsDiv.classList.add("ships-div");
   const ships = getShips();
+  shipsDiv.appendChild(ships);
   setupContainer.appendChild(shipsDiv);
 
   const buttonsDiv = getButtons();
@@ -187,7 +189,19 @@ function handleMouseLeave(row, col, currLength, isLeft, boardArr) {
   }
 }
 
-function getShips() {}
+function getShips() {
+  const instructions = document.createElement("div");
+
+  const place = document.createElement("p");
+  place.innerText = "Click to place the ship";
+  instructions.appendChild(place);
+
+  const rotaion = document.createElement("p");
+  rotaion.innerText = "Right click to rotate ship";
+  instructions.appendChild(rotaion);
+
+  return instructions;
+}
 
 function getButtons() {
   const buttonsContainer = document.createElement("div");

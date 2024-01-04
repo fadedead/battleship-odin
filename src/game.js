@@ -1,3 +1,8 @@
+const {
+  gameFinished,
+  updatePlayerAndComputerBoards,
+  updatePlayerBoards,
+} = require("./gameUI");
 const { generateRandomShipPlacements } = require("./gameUtil");
 const { Player } = require("./player");
 
@@ -25,14 +30,14 @@ class Game {
   playMoveVsComputer(move) {
     this.playerOne.playMove(move);
     if (this.playerOne.checkWin()) {
-      // Call to show the win
+      gameFinished("You Win!!");
     } else {
       this.playerTwo.playRandomMove();
       if (this.playerTwo.checkWin()) {
-        // Call to show the win
+        gameFinished("Computer Wins!!");
       }
-      // Call to show the move played
     }
+    updatePlayerBoards();
   }
 }
 

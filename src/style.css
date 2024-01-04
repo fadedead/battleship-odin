@@ -21,12 +21,12 @@
 	height: 60vh;
 	width: 90vw;
 
+	font-size: 1.3rem;
+
 	display: flex;
-	flex-direction: column;
+	gap: 2rem;
 	align-items: center;
 	justify-content: center;
-
-	border: 1px solid limegreen;
 }
 
 .board {
@@ -36,10 +36,24 @@
 	display: grid;
 	grid-template-rows: repeat(10, 1fr);
 	grid-template-columns: repeat(10, 1fr);
-	border: 1px solid limegreen;
+}
+
+.ships-div {
+	height: 80%;
+	width: 30%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border: 1px solid black;
 }
 
 .cell {
+	font-size: 1.3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	border: 1px solid black;
 }
 
@@ -51,7 +65,6 @@
 	gap: 5rem;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid limegreen;
 }
 
 .setup-button {
@@ -66,6 +79,4 @@
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
-
-	border: 1px solid limegreen;
 }
