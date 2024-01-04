@@ -33,28 +33,37 @@ function generateRandomShipPlacements() {
 function checkShipExist(x, y, rotation, length, visited) {
   if (rotation === 0) {
     if (y + length > 9) return true;
-    let shipStr = "";
-    for (let checkY = y; checkY < y + length; checkY++) {
-      shipStr += x + checkY;
+
+    const currCells = [];
+    for (let checkY = y; checkY <= y + length; checkY++) {
+      let shipStr = "" + x + checkY;
+      currCells.push(shipStr);
+      if (visited.has(shipStr)) {
+        return true;
+      }
     }
-    if (visited.has(shipStr)) {
-      return true;
-    } else {
-      visited.add(shipStr);
-      return false;
+
+    for (let val of currCells) {
+      visited.add(val);
     }
+    return false;
   } else {
     if (x + length > 9) return true;
-    let shipStr = "";
-    for (let checkX = x; checkX < x + length; checkX++) {
-      shipStr += checkX + y;
+
+    const currCells = [];
+    for (let checkX = x; checkX <= x + length; checkX++) {
+      let shipStr = "" + checkX + y;
+
+      currCells.push(shipStr);
+      if (visited.has(shipStr)) {
+        return true;
+      }
     }
-    if (visited.has(shipStr)) {
-      return true;
-    } else {
-      visited.add(shipStr);
-      return false;
+
+    for (let val of currCells) {
+      visited.add(val);
     }
+    return false;
   }
 }
 
